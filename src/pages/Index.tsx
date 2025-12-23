@@ -18,6 +18,24 @@ const Index = () => {
       price: 'Вход бесплатный',
       ageRating: '16+',
       description: 'Будет классно! Привезу новый альбом.'
+    },
+    {
+      id: 2,
+      title: 'Концерт Billy в Москве',
+      date: '30 декабря',
+      time: '20:10',
+      venue: 'Москва, Рязанский просп., 8а, стр. 10',
+      coordinates: { lat: 55.718, lng: 37.789 },
+      ageRating: '16+',
+      ageNote: 'с 14 лет — с согласия родителей',
+      ticketLink: 'https://example.com/tickets',
+      tickets: [
+        { zone: 'Танцпол', price: 5000 },
+        { zone: 'VIP', price: 9500 },
+        { zone: 'VIP 1 класса', price: 10000 }
+      ],
+      venueMapImage: 'https://cdn.poehali.dev/projects/87ae48c5-d3ce-4c7b-8fdc-135b2811b4a2/files/87a69f7c-8b66-4ab1-887f-1067f77ea210.jpg',
+      description: 'Большой концерт в Москве! Презентация нового альбома.'
     }
   ];
   const news = [
@@ -185,6 +203,56 @@ const Index = () => {
                         <div className="p-6 rounded-xl bg-primary/10">
                           <p className="text-lg text-muted-foreground">{concert.description}</p>
                         </div>
+
+                        {concert.tickets && (
+                          <div className="p-6 rounded-xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20">
+                            <h4 className="text-xl font-bold mb-4 flex items-center">
+                              <Icon name="Ticket" size={20} className="mr-2" />
+                              Билеты на концерт
+                            </h4>
+                            <div className="grid gap-3 mb-4">
+                              {concert.tickets.map((ticket, index) => (
+                                <div key={index} className="flex justify-between items-center p-4 rounded-lg bg-background/50">
+                                  <span className="font-semibold">{ticket.zone}</span>
+                                  <span className="text-xl font-bold text-accent">{ticket.price.toLocaleString()} ₽</span>
+                                </div>
+                              ))}
+                            </div>
+                            {concert.ageNote && (
+                              <p className="text-sm text-muted-foreground mb-4 flex items-center">
+                                <Icon name="Info" size={16} className="mr-2" />
+                                {concert.ageNote}
+                              </p>
+                            )}
+                            {concert.ticketLink && (
+                              <Button
+                                size="lg"
+                                className="w-full hover-glow"
+                                onClick={() => window.open(concert.ticketLink, '_blank')}
+                              >
+                                <Icon name="ShoppingCart" size={20} className="mr-2" />
+                                Купить билеты
+                              </Button>
+                            )}
+                          </div>
+                        )}
+
+                        {concert.venueMapImage && (
+                          <div className="rounded-xl overflow-hidden border border-border/50">
+                            <img
+                              src={concert.venueMapImage}
+                              alt="Схема зала"
+                              className="w-full h-auto"
+                            />
+                            <div className="p-4 bg-muted/50">
+                              <p className="text-sm text-muted-foreground text-center">
+                                <Icon name="Map" size={16} className="inline mr-2" />
+                                Схема расположения зон в зале
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
                         <div className="rounded-xl overflow-hidden border border-border/50">
                           <iframe
                             src={`https://yandex.ru/map-widget/v1/?ll=${concert.coordinates.lng}%2C${concert.coordinates.lat}&z=16&l=map&pt=${concert.coordinates.lng}%2C${concert.coordinates.lat}%2Cpm2rdm`}
