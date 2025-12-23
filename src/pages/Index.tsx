@@ -14,6 +14,7 @@ const Index = () => {
       date: '15 июня',
       time: '14:50',
       venue: 'Рязань, Почтовая',
+      coordinates: { lat: 54.629393, lng: 39.741253 },
       price: 'Вход бесплатный',
       ageRating: '16+',
       description: 'Будет классно! Привезу новый альбом.'
@@ -180,8 +181,29 @@ const Index = () => {
                       {selectedConcert === concert.id ? 'Скрыть информацию' : 'Подробнее'}
                     </Button>
                     {selectedConcert === concert.id && (
-                      <div className="mt-4 p-6 rounded-xl bg-primary/10 animate-fade-in">
-                        <p className="text-lg text-muted-foreground">{concert.description}</p>
+                      <div className="mt-4 space-y-4 animate-fade-in">
+                        <div className="p-6 rounded-xl bg-primary/10">
+                          <p className="text-lg text-muted-foreground">{concert.description}</p>
+                        </div>
+                        <div className="rounded-xl overflow-hidden border border-border/50">
+                          <iframe
+                            src={`https://yandex.ru/map-widget/v1/?ll=${concert.coordinates.lng}%2C${concert.coordinates.lat}&z=16&l=map&pt=${concert.coordinates.lng}%2C${concert.coordinates.lat}%2Cpm2rdm`}
+                            width="100%"
+                            height="400"
+                            frameBorder="0"
+                            allowFullScreen
+                            className="w-full"
+                          />
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className="w-full hover-glow"
+                          onClick={() => window.open(`https://yandex.ru/maps/?pt=${concert.coordinates.lng},${concert.coordinates.lat}&z=16&l=map`, '_blank')}
+                        >
+                          <Icon name="MapPin" size={20} className="mr-2" />
+                          Открыть в Яндекс.Картах
+                        </Button>
                       </div>
                     )}
                   </div>
