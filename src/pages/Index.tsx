@@ -12,8 +12,10 @@ const Index = () => {
       id: 1,
       title: 'Концерт Billy',
       date: '15 июня',
+      time: '14:50',
       venue: 'Рязань, Почтовая',
       price: 'Вход бесплатный',
+      ageRating: '16+',
       description: 'Будет классно! Привезу новый альбом.'
     }
   ];
@@ -88,18 +90,30 @@ const Index = () => {
       <main className="relative z-10 container mx-auto px-6 py-12">
         {activeSection === 'bio' && (
           <div className="animate-fade-in">
-            <div className="max-w-4xl mb-20">
-              <h2 className="text-6xl font-bold mb-6 text-gradient">
-                BILLY
-              </h2>
-              <p className="text-2xl text-muted-foreground mb-4">
-                Игорь aka Billy
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Молодой артист из Рязани, начавший свой творческий путь 21 августа. 
-                Billy создает современную музыку, объединяющую энергию и эмоции. 
-                Каждый трек — это история, рассказанная через звук.
-              </p>
+            <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+              <div className="order-2 lg:order-1">
+                <h2 className="text-6xl font-bold mb-6 text-gradient">
+                  BILLY
+                </h2>
+                <p className="text-2xl text-muted-foreground mb-4">
+                  Игорь aka Billy
+                </p>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Молодой артист из Рязани, начавший свой творческий путь 21 августа. 
+                  Billy создает современную музыку, объединяющую энергию и эмоции. 
+                  Каждый трек — это история, рассказанная через звук.
+                </p>
+              </div>
+              <div className="order-1 lg:order-2">
+                <div className="relative overflow-hidden rounded-3xl animate-scale-in">
+                  <img
+                    src="https://cdn.poehali.dev/files/5352960338673996478.jpg"
+                    alt="Billy"
+                    className="w-full h-[500px] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent"></div>
+                </div>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
@@ -135,11 +149,20 @@ const Index = () => {
                 <Card key={concert.id} className="p-8 bg-card/50 backdrop-blur border-primary/20 hover-glow">
                   <div className="flex flex-col gap-4">
                     <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-3xl font-bold mb-2">{concert.title}</h3>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h3 className="text-3xl font-bold">{concert.title}</h3>
+                          <span className="px-3 py-1 rounded-full bg-accent/20 text-accent text-sm font-semibold">
+                            {concert.ageRating}
+                          </span>
+                        </div>
                         <p className="text-lg text-muted-foreground mb-1">
                           <Icon name="Calendar" size={18} className="inline mr-2" />
                           {concert.date}
+                        </p>
+                        <p className="text-lg text-muted-foreground mb-1">
+                          <Icon name="Clock" size={18} className="inline mr-2" />
+                          {concert.time}
                         </p>
                         <p className="text-lg text-muted-foreground mb-1">
                           <Icon name="MapPin" size={18} className="inline mr-2" />
