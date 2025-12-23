@@ -5,8 +5,18 @@ import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('bio');
+  const [selectedConcert, setSelectedConcert] = useState<number | null>(null);
 
-  const concerts = [];
+  const concerts = [
+    {
+      id: 1,
+      title: 'Концерт Billy',
+      date: '15 июня',
+      venue: 'Рязань, Почтовая',
+      price: 'Вход бесплатный',
+      description: 'Будет классно! Привезу новый альбом.'
+    }
+  ];
   const news = [
     {
       id: 1,
@@ -23,8 +33,7 @@ const Index = () => {
   ];
 
   const music = [
-    { id: 1, title: 'Дебютный трек', type: 'Сингл', status: 'Скоро' },
-    { id: 2, title: 'Первый альбом', type: 'Альбом', status: 'В работе' }
+    { id: 1, title: 'Ocean under my skin', type: 'Альбом', status: 'Скоро выйдет' }
   ];
 
   return (
@@ -79,30 +88,18 @@ const Index = () => {
       <main className="relative z-10 container mx-auto px-6 py-12">
         {activeSection === 'bio' && (
           <div className="animate-fade-in">
-            <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-              <div className="order-2 lg:order-1">
-                <h2 className="text-6xl font-bold mb-6 text-gradient">
-                  BILLY
-                </h2>
-                <p className="text-2xl text-muted-foreground mb-4">
-                  Игорь aka Billy
-                </p>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  Молодой артист из Рязани, начавший свой творческий путь 21 августа. 
-                  Billy создает современную музыку, объединяющую энергию и эмоции. 
-                  Каждый трек — это история, рассказанная через звук.
-                </p>
-              </div>
-              <div className="order-1 lg:order-2">
-                <div className="relative overflow-hidden rounded-3xl animate-scale-in">
-                  <img
-                    src="https://cdn.poehali.dev/projects/87ae48c5-d3ce-4c7b-8fdc-135b2811b4a2/files/0cf07f54-b2f1-47df-8d30-17d6e4c0f500.jpg"
-                    alt="Billy"
-                    className="w-full h-[500px] object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
-                </div>
-              </div>
+            <div className="max-w-4xl mb-20">
+              <h2 className="text-6xl font-bold mb-6 text-gradient">
+                BILLY
+              </h2>
+              <p className="text-2xl text-muted-foreground mb-4">
+                Игорь aka Billy
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Молодой артист из Рязани, начавший свой творческий путь 21 августа. 
+                Billy создает современную музыку, объединяющую энергию и эмоции. 
+                Каждый трек — это история, рассказанная через звук.
+              </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
@@ -133,35 +130,41 @@ const Index = () => {
               Концерты
             </h2>
             
-            {concerts.length === 0 ? (
-              <Card className="p-16 text-center bg-card/50 backdrop-blur border-primary/20">
-                <Icon name="Calendar" size={80} className="text-primary mx-auto mb-6 opacity-50" />
-                <h3 className="text-3xl font-bold mb-4">Мероприятия не запланированы</h3>
-                <p className="text-lg text-muted-foreground mb-8">
-                  Новые концерты Billy скоро появятся. Следите за обновлениями!
-                </p>
-                <Button size="lg" className="gradient-purple border-0 text-white hover-glow">
-                  <Icon name="Bell" size={20} className="mr-2" />
-                  Получать уведомления
-                </Button>
-              </Card>
-            ) : (
-              <div className="grid gap-6">
-                {concerts.map((concert, index) => (
-                  <Card key={index} className="p-6 bg-card/50 backdrop-blur border-primary/20 hover-glow">
+            <div className="grid gap-6">
+              {concerts.map((concert) => (
+                <Card key={concert.id} className="p-8 bg-card/50 backdrop-blur border-primary/20 hover-glow">
+                  <div className="flex flex-col gap-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-2xl font-bold mb-2">{concert.title}</h3>
-                        <p className="text-muted-foreground">{concert.date} • {concert.venue}</p>
+                        <h3 className="text-3xl font-bold mb-2">{concert.title}</h3>
+                        <p className="text-lg text-muted-foreground mb-1">
+                          <Icon name="Calendar" size={18} className="inline mr-2" />
+                          {concert.date}
+                        </p>
+                        <p className="text-lg text-muted-foreground mb-1">
+                          <Icon name="MapPin" size={18} className="inline mr-2" />
+                          {concert.venue}
+                        </p>
+                        <p className="text-lg font-semibold text-accent mt-2">{concert.price}</p>
                       </div>
-                      <Button className="gradient-purple border-0 text-white">
-                        Купить билет
-                      </Button>
                     </div>
-                  </Card>
-                ))}
-              </div>
-            )}
+                    <Button
+                      size="lg"
+                      className="gradient-purple border-0 text-white hover-glow w-full"
+                      onClick={() => setSelectedConcert(selectedConcert === concert.id ? null : concert.id)}
+                    >
+                      <Icon name="Ticket" size={20} className="mr-2" />
+                      {selectedConcert === concert.id ? 'Скрыть информацию' : 'Подробнее'}
+                    </Button>
+                    {selectedConcert === concert.id && (
+                      <div className="mt-4 p-6 rounded-xl bg-primary/10 animate-fade-in">
+                        <p className="text-lg text-muted-foreground">{concert.description}</p>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         )}
 
@@ -190,6 +193,39 @@ const Index = () => {
                   </div>
                 </Card>
               ))}
+              
+              <Card className="p-8 bg-card/50 backdrop-blur border-primary/20">
+                <h3 className="text-2xl font-bold mb-6">Следите за Billy в соцсетях</h3>
+                <div className="flex flex-wrap gap-4">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="hover-glow"
+                    onClick={() => window.open('https://t.me/twoidiot_52', '_blank')}
+                  >
+                    <Icon name="Send" size={20} className="mr-2" />
+                    Telegram
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="hover-glow"
+                    onClick={() => window.open('https://vk.com/billy_238', '_blank')}
+                  >
+                    <Icon name="Share2" size={20} className="mr-2" />
+                    VK
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="hover-glow"
+                    onClick={() => window.open('https://youtube.com/@billy-yea?si=9LViSIO2r6aMdB2', '_blank')}
+                  >
+                    <Icon name="Youtube" size={20} className="mr-2" />
+                    YouTube
+                  </Button>
+                </div>
+              </Card>
             </div>
           </div>
         )}
@@ -224,20 +260,56 @@ const Index = () => {
             <Card className="mt-8 p-8 bg-card/50 backdrop-blur border-primary/20">
               <h3 className="text-2xl font-bold mb-4">Слушать Billy</h3>
               <p className="text-muted-foreground mb-6">
-                Треки Billy скоро появятся на всех популярных платформах
+                Мои треки уже доступны на платформах
               </p>
-              <div className="flex gap-4">
-                <Button variant="outline" className="hover-glow">
+              <div className="flex flex-wrap gap-4">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="hover-glow"
+                  onClick={() => window.open('https://vk.com/billy_238', '_blank')}
+                >
                   <Icon name="Music" size={20} className="mr-2" />
-                  Spotify
+                  VK Музыка
                 </Button>
-                <Button variant="outline" className="hover-glow">
-                  <Icon name="Music" size={20} className="mr-2" />
-                  Apple Music
-                </Button>
-                <Button variant="outline" className="hover-glow">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="hover-glow"
+                  onClick={() => window.open('https://youtube.com/@billy-yea?si=9LViSIO2r6aMdB2', '_blank')}
+                >
                   <Icon name="Youtube" size={20} className="mr-2" />
                   YouTube
+                </Button>
+              </div>
+            </Card>
+
+            <Card className="mt-6 p-8 bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur border-primary/30">
+              <h3 className="text-2xl font-bold mb-4">Поддержать Billy</h3>
+              <p className="text-muted-foreground mb-6">
+                Ваша поддержка помогает создавать новую музыку
+              </p>
+              <div className="grid grid-cols-3 gap-4">
+                <Button
+                  size="lg"
+                  className="gradient-purple border-0 text-white hover-glow flex flex-col h-auto py-6"
+                >
+                  <Icon name="Heart" size={28} className="mb-2" />
+                  <span className="text-2xl font-bold">100₽</span>
+                </Button>
+                <Button
+                  size="lg"
+                  className="gradient-sunset border-0 text-white hover-glow flex flex-col h-auto py-6"
+                >
+                  <Icon name="Heart" size={28} className="mb-2" />
+                  <span className="text-2xl font-bold">1000₽</span>
+                </Button>
+                <Button
+                  size="lg"
+                  className="gradient-ocean border-0 text-white hover-glow flex flex-col h-auto py-6"
+                >
+                  <Icon name="Heart" size={28} className="mb-2" />
+                  <span className="text-2xl font-bold">2000₽</span>
                 </Button>
               </div>
             </Card>
